@@ -1,0 +1,35 @@
+/*
+ Lesson 07 - Physical Outputs
+*/
+
+int redPin = 9;
+int greenPin = 10;
+int bluePin = 11;
+
+int rPotPin = A0;
+
+int readValue;
+int greenValue;
+int blueValue;
+int redValue;
+
+void setup() {
+  Serial.begin(9600);
+
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+  
+  pinMode(rPotPin, INPUT);
+}
+
+void loop() {
+  readValue = analogRead(rPotPin);
+
+  redValue = (255./1023.)*readValue; //you need . so the math of integers can be decimal
+
+  analogWrite(redPin, redValue); 
+
+  analogWrite(greenPin, greenValue);
+  analogWrite(bluePin, blueValue); //these are just 0 values
+}
