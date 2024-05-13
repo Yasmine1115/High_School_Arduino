@@ -1,0 +1,40 @@
+/*
+  Lesson 04 - Controlling two LEDs with loops
+*/
+
+int greenPin = 8;
+int yellowPin = 12;
+
+void setup() {
+    pinMode(greenPin, OUTPUT);
+    pinMode(yellowPin, OUTPUT);
+
+    Serial.begin(9600);
+}
+
+void loop() {
+  //create a for loop that will loop 4 times for the yellow LED
+  for(int i = 0; i<4; i++)//modifiable
+  /*first condition: starts at 0, 
+  second condition(end condition): what makes it stop looping
+  i++: after the loop i will iterate by one*/
+  {
+    digitalWrite(yellowPin, HIGH);
+    delay(1000);
+    digitalWrite(yellowPin, LOW);
+    delay(1000);
+  }
+  //create the variable that will control the while loop 
+  int j=0;
+  
+  while(j<3)
+  {
+    digitalWrite(greenPin, HIGH);
+    delay(1000);
+    digitalWrite(greenPin, LOW);
+    delay(1000);
+
+    j++;//after the while loop runs it adds 1 to j
+  }
+
+}
