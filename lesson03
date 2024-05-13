@@ -1,0 +1,35 @@
+/*
+Lesson 03 - Using the serial monitor
+*/
+
+//declare variables for green pin, blinkTime, and welcomeMessage
+int greenPin = 8; /*instead of changing all of the 8's eveytime you move the position you can just change the initial*/
+int blinkTime;
+String welcomeMessage = "Hello. This program will let you decide how long to keep your LED on for.";
+
+/*Camel Case: variables are case sensitive, you start with lowercase and any additianal word it starts with a capital(we can't use spaces)*/
+
+//Initialize pin #8 on the arduino to be an output pin
+void setup() {
+  pinMode(greenPin,OUTPUT); //assign pin #8 on the arduino as OUTPUT pin
+  Serial.begin(9600);
+  Serial.println(welcomeMessage + "Yasmine");//This is string concatenation
+  Serial.println();//ln means line
+}
+
+//begin loop function
+void loop() {
+  Serial.println("Blink Time (seconds):");
+
+  //wait for the user to input data into Serial
+  while(Serial.available() == 0){}//the code inside {} will run forever until the condition the outer () is met.
+
+  //Store their answer (as an integer) in the variable blinkTime
+  blinkTime = Serial.parseInt()*1000;
+  
+  digitalWrite(greenPin, HIGH); //Trun on the LED conected to pin #8
+  delay(blinkTime); //1000 milliseconds(1 second delay)
+
+  digitalWrite(greenPin, LOW);
+  delay(500); 
+}
