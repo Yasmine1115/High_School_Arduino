@@ -1,0 +1,54 @@
+/*
+Lesson_1 - Making the onboard LED turn on/off
+*/
+
+int onboardLED = 13;
+/*
+now onboardLED will always be 13
+*/
+
+void setup()
+{
+  pinMode(onboardLED, OUTPUT);
+  
+}
+/*SOS morse code*/
+void loop()
+{
+  digitalWrite(onboardLED, HIGH);
+  delay(1000);/*1000 is 1 second*/
+  digitalWrite(onboardLED, LOW);
+  delay(500);
+  digitalWrite(onboardLED, HIGH);
+  delay(1000);
+  digitalWrite(onboardLED, LOW);
+  delay(500);
+  digitalWrite(onboardLED, HIGH);
+  delay(1000);
+  digitalWrite(onboardLED, LOW);
+  delay(500);
+  digitalWrite(onboardLED, HIGH);
+  delay(3000);
+  digitalWrite(onboardLED, LOW);
+  delay(500);
+  digitalWrite(onboardLED, HIGH);
+  delay(3000);
+  digitalWrite(onboardLED, LOW);
+  delay(500);
+  digitalWrite(onboardLED, HIGH);
+  delay(3000);
+  digitalWrite(onboardLED, LOW);
+  delay(500);
+  digitalWrite(onboardLED, HIGH);
+  delay(1000);/*1000 is 1 second*/
+  digitalWrite(onboardLED, LOW);
+  delay(500);
+  digitalWrite(onboardLED, HIGH);
+  delay(1000);
+  digitalWrite(onboardLED, LOW);
+  delay(500);
+  digitalWrite(onboardLED, HIGH);
+  delay(1000);
+  digitalWrite(onboardLED, LOW);
+  delay(500);
+}
