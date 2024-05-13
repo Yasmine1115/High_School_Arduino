@@ -1,0 +1,27 @@
+int pPin = A0;
+int pValue;
+int redLed = 9;// It needs to be the one with ~, if not it will not faid(like 8)
+int brightness;
+
+//the ~ lets us use the analog pin
+
+void setup(){
+    pinMode(redLed, OUTPUT);  
+    Serial.begin(9600);  
+}
+
+void loop() {
+    pValue = analogRead(pPin);   
+    Serial.println("Input: ");
+    Serial.println(pValue);
+
+    brightness = (255.0/1023.0)*pValue;
+    //analogWrite only has a range of 0-255
+    Serial.print("Output: ");
+    Serial.println(brightness);
+
+    analogWrite(redLed, brightness);
+    delay(1000);
+    
+  
+} 
