@@ -1,0 +1,28 @@
+/*
+  Output has pValue and ConvertedValue: also print a Serial from 0 to 4
+*/
+
+int pPin = A0;
+int pValue;
+int convertedValue;
+
+void setup() {
+    //Setup the potentiometer input pin
+    pinMode(pPin, INPUT);
+
+    //Set up our Serial Monitor
+    Serial.begin(9600);
+    Serial.println("Below are the inputted potentiometer values");
+}
+
+void loop() {
+  pValue = analogRead(pPin); 
+  Serial.println("pValue: ");
+  Serial.println(pValue);
+ 
+  convertedValue = (analogRead(0)/204.6);
+  Serial.println("convertedValue: ");
+  Serial.println(convertedValue);
+
+  delay(1000);
+}
