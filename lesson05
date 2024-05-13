@@ -1,0 +1,25 @@
+/*
+  Lesson 05 - Reading the value of a potentiometer
+*/
+
+int pPin = A0;
+int pValue;
+
+void setup() {
+    //Setup the potentiometer input pin
+    pinMode(pPin, INPUT);
+
+    //Set up our Serial Monitor
+    Serial.begin(9600);
+    Serial.println("Below are the inputted potentiometer values");
+}
+
+void loop() {
+    pValue = analogRead(pPin); //reads the potentiometer and store the value in pValue
+  //digital is 0, or 1(on or off). analog is spectram of values in between.
+
+  //print out the value of the potentiometer reading to the Serial Monitor
+  Serial.println("pValue: ");
+  Serial.println(pValue);
+  /*When you turn the potentiometer, the lowest is 0 and the highest is 1023*/
+}
