@@ -1,0 +1,44 @@
+/*
+customize the welcom message, ask the user for their first name and include their first name in the welcome message
+  Use Serial.readString() to access a user inputted String
+*/
+
+
+int greenPin = 8;
+int blinkTime;
+
+String welcomeMessage = "This program will let you decide how long to keep your LED on for.";
+String userName;
+
+
+void setup() {
+  pinMode(greenPin,OUTPUT); 
+  Serial.begin(9600);
+  
+ 
+  Serial.println("Your first name is?");
+  while(Serial.available() == 0){}
+  String userName = Serial.readString();//The order is important, if not it won't work
+  Serial.print("Welcome " + userName);
+  Serial.println(welcomeMessage);
+  Serial.println();
+  
+    
+}
+
+
+void loop() {
+  Serial.println("Blink Time (seconds):");
+
+ 
+  while(Serial.available() == 0){}
+
+  
+  blinkTime = Serial.parseInt()*1000;
+  
+  digitalWrite(greenPin, HIGH);
+  delay(blinkTime);
+
+  digitalWrite(greenPin, LOW);
+  delay(500); 
+}
