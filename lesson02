@@ -1,0 +1,24 @@
+/*
+Lesson 02 - Controlling an external LED
+*/
+
+//Initialize pin #8 on the arduino to be an output pin
+void setup() {
+  pinMode(8,OUTPUT); //assign pim #8 on the arduino as OUTPUT pin
+  pinMode(4,OUTPUT);
+}
+
+//begin loop function
+void loop() {
+  digitalWrite(8, HIGH); //Trun on the LED conected to pin #8
+  delay(1000); //1000 milliseconds(1 second delay)
+
+  digitalWrite(8, LOW); //Trun off the LED conncected to pin #8
+  delay(1000); //1000 milliseconds(1 second delay)
+
+  digitalWrite(4, HIGH); 
+  delay(500); 
+
+  digitalWrite(4, LOW);
+  delay(500); 
+}
