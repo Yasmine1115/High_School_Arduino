@@ -1,0 +1,64 @@
+/*
+  use for loops to create color blend
+*/
+
+int redPin = 9;
+int greenPin = 10;
+int bluePin = 11;
+int rBrightness;
+int gBrightness;
+int bBrightness;
+
+
+
+void setup() 
+{
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+}
+
+void loop() 
+{
+  rBrightness= 255;
+  gBrightness= 0;
+  bBrightness= 0;
+  for(int i = 0; i<255; i=i+1 ){
+  rBrightness= rBrightness-1;
+  gBrightness= gBrightness+1;
+  analogWrite(redPin, rBrightness);
+  analogWrite(greenPin, gBrightness);    
+  delay(20);
+  }
+
+  rBrightness= 0;
+  gBrightness= 255;
+  bBrightness= 0;
+  for(int i = 0; i<255; i=i+1 ){
+  gBrightness= gBrightness-1;
+  bBrightness= bBrightness+1;
+  analogWrite(greenPin, gBrightness);
+  analogWrite(bluePin, bBrightness);    
+  delay(20);
+  }
+
+  rBrightness= 0;
+  gBrightness= 0;
+  bBrightness= 255;
+  for(int i = 0; i<255; i=i+1 ){
+  bBrightness= bBrightness-1;
+  rBrightness= rBrightness+1;
+  analogWrite(bluePin, bBrightness);
+  analogWrite(redPin, rBrightness);    
+  delay(20);
+  }
+  
+  
+  
+  
+
+  
+  
+  
+  
+}
