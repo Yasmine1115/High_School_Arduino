@@ -1,0 +1,50 @@
+/*
+  Lesson 06 - Using an external RGB Led
+*/
+
+//Physical Outputs
+int redPin = 9;
+int greenPin = 10;
+int bluePin = 11;
+
+//Constants & Variables to store R, G and B values
+int redValue;
+int greenValue;
+int blueValue;
+
+void setup() 
+{
+  Serial.begin(9600);
+
+  //set up all of the output pins for each colour
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+}
+
+void loop() 
+{
+  //create a prompt for the user
+  Serial.println("\nPlease enter the color values for the LED");
+  Serial.println();
+
+  //ask the user fot the red, green and blue values they wish to use
+  Serial.println("Red Value: ");
+  while(Serial.available()==0){};
+  redValue = Serial.parseInt();
+
+  Serial.println("Green Value: ");
+  while(Serial.available()==0){};
+  greenValue = Serial.parseInt();
+
+  Serial.println("Blue Value: ");
+  while(Serial.available()==0){};
+  blueValue = Serial.parseInt();
+
+  //Change the LED color value according to the user inputs
+  delay(5000);
+  analogWrite(redPin, redValue);
+  analogWrite(greenPin, greenValue);
+  analogWrite(bluePin, blueValue);
+  
+}
