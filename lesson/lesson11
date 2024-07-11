@@ -1,0 +1,54 @@
+/*
+  Lesson 11 - Learning to use a Servo motor and learning method structure
+*/
+#include <Servo.h>\ //Include the Survo library
+int servoPin = 3; //Declare the Servo Pin
+Servo Servo1; //Create a servo object
+
+//setup method
+void setup() {
+Servo1.attach(servoPin); //need to attach the servo to the used pin number
+Serial.begin(9600);  
+}
+
+//loop method
+void loop() {
+  Serial.println("Enter a value from 0 - 180 to move the servo to that position or -1 to sweep: ");
+  while(Serial.available()==0){}
+  int userVal = Serial.parseInt();
+
+  if(userVal == -1)
+  {
+    sweep();
+  }
+
+  else if(userVal >= 0 && userVal <=180)
+  {
+    control(userVal);
+  }
+
+  delay(1000);
+}
+
+//control method
+void control(int x)
+{
+  Servo1.write(x);//from loop, userVal is inserted to x
+
+}
+
+//sweep mwthod
+void sweep()
+{
+  for(int i = 0; i<180; i++)//sweep from 0 to 180
+  {
+    Servo1.write(i);
+    delay(5);
+  }
+
+  for(int i =180; i>0; i--)//sweep from 180 to 0
+  {
+    Servo1.write(i);    
+    delay(5);
+  }
+}
