@@ -1,0 +1,28 @@
+/*
+  Lesson 08 -
+*/
+
+int ledPin = 8;
+int buttonPin =4;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(buttonPin, INPUT);
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  //crate a variable to temporarily store the state of the button
+  int buttonState = digitalRead(buttonPin);
+
+  //check the state of the button, High-turn on
+  if(buttonState == HIGH)
+  {
+    digitalWrite(ledPin, HIGH);
+  }
+  else
+  {
+    digitalWrite(ledPin, LOW);
+  }
+}
