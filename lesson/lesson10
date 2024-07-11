@@ -1,0 +1,18 @@
+#include <LiquidCrystal_I2C.h>
+/*
+  Lesson 10 - Using an LCD display screen
+*/
+
+LiquidCrystal_I2C lcd(0x27, 20, 4);//set the LCD addredd to 0x27 for a 16 chars and 2 line display
+
+void setup() {
+  lcd.init();//initialize the lcd screen
+  //print a message to the LCD screen
+  lcd.backlight();
+  lcd.setCursor(1,0);//first row, bigining of first row
+  lcd.print("Hello World");//prints Hello World
+}
+
+void loop() {
+    
+}
