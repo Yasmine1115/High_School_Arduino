@@ -1,0 +1,86 @@
+/*
+  Lesson 09 - working with a colour sensor
+*/
+
+int redPin = 11;
+int greenPin = 10;
+int bluePin = 9;
+
+int S2 = 7;
+int S3 = 8;
+int outPin = 4;
+
+int rColorStrength;
+int gColorStrength;
+int bColorStrength;
+
+unsigned int pulseWidth; //input for the color sensor
+
+void setup() {
+ Serial.begin(9600);
+
+ //rgb led pins
+ pinMode(redPin, OUTPUT);
+ pinMode(greenPin, OUTPUT);
+ pinMode(bluePin, OUTPUT);
+
+ //color sensor pins
+ pinMode(S2, OUTPUT); //let us send a signal to sensor pin2
+ pinMode(S3, OUTPUT);
+ pinMode(outPin, INPUT);//let us read the signal received back from sensor
+
+
+}
+
+void loop() {
+ digitalWrite(S2, LOW);
+ digitalWrite(S3, LOW);
+ pulseWidth = pulseIn(outPin, LOW);//store in the pulseWidth variable (0 - 2560 approx range)
+ rColorStrength = (pulseWidth/10)-1;
+ rColorStrength = (255-rColorStrength);//adjust to the color spectrum (0 -255) so a small pulsewidth is a strong color match
+
+ digitalWrite(S2, HIGH);
+ digitalWrite(S3, HIGH);
+ pulseWidth = pulseIn(outPin, LOW);
+ gColorStrength = (pulseWidth/14)-1;
+ gColorStrength = (255-gColorStrength);
+
+ digitalWrite(S2, LOW);
+ digitalWrite(S3, HIGH);
+ pulseWidth = pulseIn(outPin, LOW);
+ bColorStrength = (pulseWidth/11)-1;
+ bColorStrength = (255-bColorStrength);
+
+ //print the color values to the serial monitor for debugging 
+ Serial.print(rColorStrength);
+ Serial.print(" ");
+ Serial.print(gColorStrength);
+ Serial.print(" ");
+ Serial.print(bColorStrength);
+ Serial.println(" ");
+ delay(250);
+
+ //find which of the color values is the highest and use that to determine the color of the LED
+ if(rColorStrength>bColorStrength && rColorStrength > gColorStrength) //if red is biggest
+{
+  rColorStrength = 255;
+  gColorStrength = 0;
+  bColorStrength = 0;
+}
+ else if(gColorStrength>bColorStrength && gColorStrength > rColorStrength)  
+{
+  rColorStrength = 0;
+  gColorStrength = 255;
+  bColorStrength = 0;
+}
+ else if(bColorStrength>gColorStrength && bColorStrength > rColorStrength)
+{
+  rColorStrength = 0;
+  gColorStrength = 0;
+  bColorStrength = 255;
+}
+ //turn on the LED with the color strength values
+ analogWrite(redPin, rColorStrength);
+ analogWrite(greenPin, gColorStrength);
+ analogWrite(bluePin, bColorStrength);
+}
