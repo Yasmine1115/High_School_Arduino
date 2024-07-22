@@ -1,0 +1,32 @@
+/*
+  LED stays on when pressed, LED stays off when pressed agine(no holding it)
+*/
+
+int ledPin = 8;
+int buttonPin =4;
+byte lastButtonState;
+byte ledState;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(buttonPin, INPUT);
+  lastButtonState = digitalRead(buttonPin);
+  Serial.begin(9600);
+}
+
+void loop() {
+  byte buttonState = digitalRead(buttonPin);
+
+  if(buttonState != lastButtonState){
+    lastButtonState = buttonState;
+    if (buttonState == LOW) {
+      if(ledState == HIGH) {
+        ledState = LOW;
+      }
+      else{
+        ledState = HIGH;
+      }
+      digitalWrite(ledPin, ledState);
+    }
+  }
+}
