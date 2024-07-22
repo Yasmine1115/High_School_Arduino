@@ -1,0 +1,36 @@
+/*
+  range of tones, more sever more high tone, use if statements
+*/
+
+const int buzzerPin = 4;
+const int sensorPin = A0;
+int sensorVal; //value for the vibration sensor (0-1024)
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(buzzerPin, OUTPUT);
+}
+void loop() {
+  //collect and store the values frome the sensor
+  sensorVal = analogRead(sensorPin);
+  //print out the sensor value
+  Serial.print("Sensor Values: ");
+  Serial.println(sensorVal);
+  if (sensorVal >300 && sensorVal <500) //300<val<500
+  {
+    tone(buzzerPin, 600); 
+  }
+  else if(sensorVal >600 && sensorVal <800) //600<val<800
+  {
+    tone(buzzerPin, 300); 
+  }
+  else if(sensorVal <1022 && sensorVal >900) //900<val<1022
+  {
+    tone(buzzerPin, 100); 
+  }
+  else
+  {
+    noTone(buzzerPin);
+  }
+  delay(100);//longer delay will make the sound longer
+}
