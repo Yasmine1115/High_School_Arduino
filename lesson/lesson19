@@ -1,0 +1,82 @@
+/*
+  add a buzzer to the circit, when waterlevel is 200 or 300 ish make the buzzer go off
+*/
+#include <SD.h>
+
+File myFile;
+String fileName = "water.csv";
+int waterVal = 0;
+int waterPin = A0;
+
+void setup() 
+{
+  Serial.begin(9600);
+  while (!Serial){};
+  initializeCard();
+
+  if (SD.exists(fileName))
+  {
+    SD.remove(fileName);
+    Serial.println("\nFile already exists. Ithas been deleted and will be overwritten\n");
+  }
+  writeHeader();
+}
+
+void initializeCard()
+{
+  Serial.print("Beginning initialization of SD Card: ");
+  if(!SD.begin(10))
+  {
+    Serial.println("SD initialization failed");
+    while(1);
+  }
+  Serial.println("SD Initialized successfully");
+  Serial.println("------------------------\n");
+}
+
+void writeHeader()
+{
+  myFile = SD.open(fileName, FILE_WRITE);
+
+  if(myFile)
+  {
+    Serial.println("----------------------\n");
+    Serial.println("Writing to "+ fileName +": ");
+
+    myFile.println("Time,Water Level");
+    myFile.close();
+  }
+  else
+  {
+    Serial.println("error opening" + fileName);
+  }
+}
+
+void writeData()
+{
+  myFile = SD.open(fileName, FILE_WRITE);
+
+  if(myFile)
+  {
+    myFile.print(millis());
+    myFile.print(",");
+    myFile.println(waterVal);
+
+    myFile.close();
+  }
+  else
+  {
+    Serial.println("error opening "+ fileName);
+  }
+}
+
+void loop() {
+  waterVal = analogRead(waterPin);
+
+  Serial.print("Water value: ");
+  Serial.println(waterVal);
+
+  writeData();
+  
+  delay(5000);
+}
