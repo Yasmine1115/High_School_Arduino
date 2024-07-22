@@ -1,0 +1,86 @@
+// extension: add the true parameter in the read temperature sensor to switch to fahrenheit.
+
+
+#include <LiquidCrystal_I2C.h>
+#include <DHT.h>
+#include <DHT_U.h>
+
+
+LiquidCrystal_I2C lcd(0x27,20,4); // set the LCD address to 0x27 for a 16 character 2 line display
+
+#define DHTPIN 7
+// analog pin sensor is connected to
+#define DHTTYPE DHT11
+// type of DHT sensor
+DHT dht(DHTPIN, DHTTYPE); // set the DHT with the appropriate pin and type
+
+
+void setup() {
+  lcd.init();
+  lcd.backlight();
+
+  dht.begin();
+ 
+  Serial.begin(9600);
+  delay(500); // delay to let the system boot
+  Serial.println("DHT Humidity and Temperature Sensor\n\n");
+  delay(1000); // wait before accessing sensor
+}
+
+void loop() {
+  // read temp and humidity values
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+  float f = dht.readTemperature(true);
+ 
+  if (isnan(h) || isnan(t)) // check that temp and humidity values were not read successfully
+    // isnan means "is not a number"
+  {
+    Serial.println("Failed to read from DHT sensor.");
+    return; // exit and rerun loop
+  }
+ 
+  // print humidity to Serial
+  Serial.print("Current Humidity: ");
+  Serial.print(h);
+  Serial.println("% ");
+ 
+  // print humidity to LCD
+  lcd.setCursor(0,0);
+  lcd.print("H = ");
+  lcd.print(h);
+  lcd.print("%");
+ 
+  // print temp to Serial
+  Serial.print("Current Temperature: ");
+  Serial.print(t);
+  Serial.print("\xC2\xB0"); // degree symbol unicode
+  Serial.print("C ");
+  Serial.print("/ ");
+  Serial.print(f);
+  Serial.print("\xC2\xB0");
+  Serial.println("F ");
+  Serial.print("\n\n");
+
+   // print temp to LCD
+  lcd.setCursor(0, 1);
+  lcd.print("T = ");
+  lcd.print(t);
+  lcd.print((char)223); // degree symbol ASCII
+  lcd.print("C ");
+  delay(2500);
+  lcd.clear();
+
+  lcd.setCursor(0,0);
+  lcd.print("H = ");
+  lcd.print(h);
+  lcd.print("%");
+  t = dht.readTemperature(true);
+  lcd.setCursor(0,1);
+  lcd.print("T = ");
+  lcd.print(t);
+  lcd.print((char)223);
+  lcd.print("F");
+  delay(2500);
+  lcd.clear();
+}
