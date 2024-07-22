@@ -1,0 +1,46 @@
+
+/*
+  when press both buttons at the same time, snap it back to zero and wait for 2 seconds
+*/
+
+#include <Servo.h>
+int buttonPin = 4;
+int button2Pin = 7;
+
+int servoPin = 3;
+Servo Servo1;
+int servoPosition = 0;
+
+void setup() {
+  Servo1.attach(servoPin); //attach the Servo pin to the Servo
+  Servo1.write(servoPosition); // start the Servo at position 0
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  //create variab;es to temporarily store the state of the buttons
+  int buttonState = digitalRead(buttonPin);
+  int button2State = digitalRead(button2Pin);
+
+  if(buttonState == HIGH && button2State == HIGH)
+  {
+    servoPosition = 0;//this needs to come first
+    Servo1.write(servoPosition);
+    
+    delay(2000);
+  }
+  
+  if(button2State == HIGH && servoPosition >= 0) //else if button 2 is on and over 0
+  {
+    Servo1.write(servoPosition);
+    servoPosition--; //subtract 1 from position
+    delay(5);
+  }
+  if(buttonState == HIGH && servoPosition < 180) //if button 1 is on and under 180
+  {
+    Servo1.write(servoPosition); //write current position
+    servoPosition++; //add 1 to position
+    delay(5);
+  }
+}
