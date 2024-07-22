@@ -1,0 +1,34 @@
+/*
+  make the buzzer buzz twice and hold it longer 
+*/
+
+const int buzzerPin = 4;
+const int sensorPin = A0;
+int sensorVal; 
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(buzzerPin, OUTPUT);
+}
+
+void loop() {
+  sensorVal = analogRead(sensorPin);
+  Serial.print("Sensor Values: ");
+  Serial.println(sensorVal);
+  if (sensorVal <1022) 
+  {
+    tone(buzzerPin, 300);
+    delay(500);
+    noTone(buzzerPin);
+    delay(500);
+    tone(buzzerPin, 300);
+    delay(500);
+    noTone(buzzerPin);
+    delay(500);
+  }
+  else
+  {
+    noTone(buzzerPin);
+  }
+  delay(1000);
+}
