@@ -1,0 +1,29 @@
+/*
+  Lesson 14 - Triggering a buzzer when shaking the arduino board
+*/
+
+const int buzzerPin = 4;
+const int sensorPin = A0;
+int sensorVal; //value for the vibration sensor (0-1024)
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(buzzerPin, OUTPUT);
+}
+
+void loop() {
+  //collect and store the values frome the sensor
+  sensorVal = analogRead(sensorPin);
+  //print out the sensor value
+  Serial.print("Sensor Values: ");
+  Serial.println(sensorVal);
+  if (sensorVal <1022) //only when the board is shaken
+  {
+    tone(buzzerPin, 300); //send a tone over buzzerPin at a pitch of 300
+  }
+  else
+  {
+    noTone(buzzerPin);
+  }
+  delay(100);//longer delay will make the sound longer
+}
