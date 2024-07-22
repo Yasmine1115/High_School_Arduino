@@ -1,0 +1,127 @@
+/*
+Lesson 17 - Using an SD card to read/write data
+
+Extension: modify the code so that your file is stored into a .csv file!
+then open a spreadsheet editor and import that .csv file into that editor
+Challenge: No challenge for this one!
+*/
+
+#include <SD.h>
+
+//Variables
+File myFile;
+String fileName = "test.csv";
+int myValue = 100; // automates some of the data we write to the sd card
+
+void setup() {
+ 
+    Serial.begin(9600);
+ 
+    while (!Serial){}; //Wait for Serial to connect
+ 
+    initializeCard(); // runs void initializeCard()
+ 
+    if (SD.exists(fileName)) //Check if file already exists
+    {
+      SD.remove(fileName); // if it exists, deletes that file and overwrites
+      Serial.println("\nFile already exists. It has been removed and will be overwritten.\n");
+    }
+ 
+    writeHeader();
+ 
+    while(myValue>0) // While our variable is over 0
+    {
+      writeData(); // Write a line of data to the file
+      myValue--; // Decrease variable by one
+      // every time our variable is over 0, write a line of data to te file and decrease variable by 1 (100 lines)
+    }
+    Serial.println("Data written successfully");
+ 
+    readMyFile(); //Read the data and print to Serial monitor
+}
+
+// initializes the sd card to make sure the program is ready to work
+void initializeCard()
+{
+  Serial.print("Beginning initialization of SD card: ");
+  // println skips line, just print keeps it on the same line (shocking)
+ 
+  if(!SD.begin(10)) //If the SD card on pin 10 is not available
+  {
+    Serial.println("SD initialization failed");
+    while(1); //Infinite loop to force reset the arduino
+  }
+ 
+  Serial.println("SD initialized successfully"); // if you reach here, it setup successfully
+  Serial.println("-----------------------\n");
+}
+
+// header
+void writeHeader()
+{
+  myFile = SD.open(fileName, FILE_WRITE); // Open file to edit
+ 
+  if(myFile)
+  {
+    Serial.println("---------------------\n");
+    Serial.print("Writing to " + fileName + ": ");
+   
+    myFile.println("Time, Value");
+   
+    myFile.close(); //Close file
+  }
+   
+  else
+  {
+    Serial.println("Error opening " + fileName);
+  }
+ 
+}
+
+void writeData()
+{
+  myFile = SD.open(fileName, FILE_WRITE);
+ 
+  if(myFile)
+  {
+    myFile.print(millis()); // Print time since Arduino last reset in milliseconds
+    myFile.print(","); // print comma
+    myFile.println(myValue); // Print variables value
+   
+    myFile.close();
+  }
+   
+  else
+  {
+    Serial.println("Error opening " + fileName);
+  }
+}
+
+void readMyFile() //Read data from the file to the Serial monitor
+{
+  myFile = SD.open(fileName); //Open file for reading
+ 
+  if(myFile) // check if file is valid
+  {
+    Serial.println("---------------------\n");
+    Serial.println("Reading data stored in: " + fileName + ": ");
+    //Read data from file and display on Serial monitor
+    while (myFile.available()) //While there is still unread data
+    {
+      Serial.write(myFile.read());
+    }
+    myFile.close(); // when there is no more data available, close the file
+  }
+   
+  else
+  {
+    Serial.println("Error opening " + fileName);
+  }
+ 
+}
+
+// not using the loop function!
+void loop() {
+   
+}
+
