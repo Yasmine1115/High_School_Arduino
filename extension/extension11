@@ -1,0 +1,78 @@
+
+/*
+  change speed of sweep(chnage the motion of sweep(or new method))
+*/
+#include <Servo.h>\ //Include the Survo library
+int servoPin = 3; //Declare the Servo Pin
+Servo Servo1; //Create a servo object
+
+//setup method
+void setup() {
+Servo1.attach(servoPin); //need to attach the servo to the used pin number
+Serial.begin(9600);  
+}
+
+//loop method
+void loop() {
+  Serial.println("Enter a value from 0 - 180 to move the servo to that position, -1 to sweep or +1 to wash: ");
+  while(Serial.available()==0){}
+  int userVal = Serial.parseInt();
+
+  if(userVal == -1)
+  {
+    sweep();
+  }
+
+  if(userVal == +1)
+  {
+    wash();
+  }
+  else if(userVal >= 0 && userVal <=180)
+  {
+    control(userVal);
+  }
+
+  delay(1000);
+}
+
+//control method
+void control(int x)
+{
+  Servo1.write(x);//from loop, userVal is inserted to x
+
+}
+
+//sweep mwthod
+void sweep()
+{
+  for(int i = 0; i<180; i++)//sweep from 0 to 180
+  {
+    Servo1.write(i);
+    delay(10);
+  }
+
+  for(int i =180; i>0; i--)//sweep from 180 to 0
+  {
+    Servo1.write(i);    
+    delay(10);
+  }
+}
+
+void wash()
+{
+  for(int i =0; i<90; i++)
+  {
+    Servo1.write(i);
+    delay(5);
+  }
+  for(int i =90; i>0; i--)
+  {
+    Servo1.write(i);
+    delay(5);
+  }
+  for(int i =0; i<180; i++)
+  {
+    Servo1.write(i);
+    delay(5);
+  }
+}
