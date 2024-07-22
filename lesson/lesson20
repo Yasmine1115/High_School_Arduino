@@ -1,0 +1,59 @@
+/*
+  Lesson 20 - Using an Ultrasonic Sensor has a collision detector
+*/
+
+#include <LiquidCrystal_I2C.h>
+
+const int triggerPin = 10;
+const int echoPin = 11;
+const int buzzerPin =4;
+
+long duration;
+float distance;
+
+LiquidCrystal_I2C lcd(0x27,20,4);
+
+
+
+void setup() {
+  Serial.begin(9600);
+
+  pinMode(buzzerPin, OUTPUT);
+  pinMode(triggerPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  lcd.init();
+  lcd.backlight();
+}
+
+void loop() {
+  digitalWrite(triggerPin, LOW);
+  delayMicroseconds(2);
+
+  digitalWrite(triggerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(triggerPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+
+  distance = (duration*0.034)/200.0;
+
+  Serial.println(String("Distance: ")+ distance + String("m"));
+
+  lcd.setCursor(0,0);
+  lcd.print("Distance");
+  lcd.setCursor(0,1);
+  lcd.print(String(distance));
+  lcd.setCursor(6,1);
+  lcd.print("m");
+
+  if(distance < 1)
+  {
+    tone(buzzerPin, 300);
+  }
+  else
+  {
+    noTone(buzzerPin);
+  }
+  delay(500);
+}
