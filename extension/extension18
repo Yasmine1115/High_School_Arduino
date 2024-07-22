@@ -1,0 +1,141 @@
+/*
+// extension: code modification - the left and right buttons: it should only work if the LED is on 
+*/
+
+#include <IRremote.hpp>
+
+//IR Variables
+const int irPin = 7;
+IRrecv irrecv(irPin);
+decode_results results;
+
+//LED output pins
+int redPin = 11;
+int greenPin = 10;
+int bluePin = 9;
+
+//Constants & Variables
+int redValue = 0;
+int greenValue = 0;
+int blueValue = 0;
+
+boolean ledON = false;
+String currentColour[3] = {"r","g","b"}; // index system starts @ 0
+int colourTracker = 0;
+
+void setup()
+{
+  Serial.begin(9600);
+
+  irrecv.begin(irPin, ENABLE_LED_FEEDBACK);
+  irrecv.blink13(true);
+
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+  setLED();
+}
+   
+//Toggle LED on/off
+void toggleLED()
+{
+  if(ledON) //LED is currently on
+  {
+    Serial.println("LED turned off");
+    analogWrite(redPin, 0);
+    analogWrite(greenPin, 0);
+    analogWrite(bluePin, 0);
+    ledON = false;
+    delay(200);
+  }
+  else //LED is currently off
+  {
+    Serial.println("LED turned on");
+    analogWrite(redPin, redValue);
+    analogWrite(greenPin, greenValue);
+    analogWrite(bluePin, blueValue);
+    ledON = true;
+  }
+}
+
+//Set LED to the colour according to colourTracker and if the LED is on
+void setLED()
+{
+  if(currentColour[colourTracker].equals("r")) //If current colour is red
+  {
+    redValue = 255;
+    greenValue = 0;
+    blueValue = 0;
+    if(ledON)
+    {
+      analogWrite(redPin, redValue);
+      analogWrite(greenPin, greenValue);
+      analogWrite(bluePin, blueValue);
+    }
+  }
+  else if(currentColour[colourTracker].equals("g")) //If current colour is red
+  {
+    redValue = 0;
+    greenValue = 255;
+    blueValue = 0;
+    if(ledON)
+    {
+      analogWrite(redPin, redValue);
+      analogWrite(greenPin, greenValue);
+      analogWrite(bluePin, blueValue);
+    }
+  }
+  else
+  {
+    redValue = 0;
+    greenValue = 0;
+    blueValue = 255;
+    if(ledON)
+    {
+      analogWrite(redPin, redValue);
+      analogWrite(greenPin, greenValue);
+      analogWrite(bluePin, blueValue);
+    }
+  }
+}
+void loop()
+{
+    if(irrecv.decode()) //if(irrecv.decode(&results)) // reading IR val
+    {
+      Serial.print(irrecv.decodedIRData.decodedRawData, HEX); //Print "old" raw data
+      switch(irrecv.decodedIRData.decodedRawData) //Check value of results against known codes
+      {
+        case 0xE31CFF00: //If OK
+          toggleLED();
+          Serial.println("OK Pressed");
+          break;
+        case 0xF708FF00: //If LEFT
+          if(ledON)
+          {
+            colourTracker = (colourTracker+2)%3;
+            setLED();
+            Serial.println("LEFT Pressed");
+            break;
+          }
+          else
+          {
+            Serial.println("LED is OFF");
+            break;
+          }
+        case 0xA55AFF00: //If RIGHT
+          if(ledON)
+          {
+            colourTracker = (colourTracker+1)%3;
+            setLED();
+            Serial.println("RIGHT Pressed");
+            break;
+          }
+          else
+          {
+            Serial.println("LED is OFF");
+            break;
+          }
+      }
+      irrecv.resume();
+    }
+}
