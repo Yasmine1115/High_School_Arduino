@@ -1,0 +1,33 @@
+/*
+  button is relesed LED will dim, button pressed LED brightens up
+  (Not actually dimming, just changing the brightness)
+*/
+
+int ledPin = 9;
+int buttonPin =4;
+int brightness;
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(buttonPin, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() 
+{
+  int buttonState = digitalRead(buttonPin);
+  
+  
+  if(buttonState == HIGH)
+  {
+    brightness = 255;
+    analogWrite(ledPin, brightness);
+    delay(1000);
+  }
+  else
+  {
+    brightness = 100 ;
+    analogWrite(ledPin, brightness);
+    delay(1000);
+  }
+}
