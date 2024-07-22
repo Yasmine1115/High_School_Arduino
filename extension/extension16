@@ -1,0 +1,58 @@
+int photoPin = A0; // photoresistor pin
+int ledPin = 6; // LED pin
+int lightVal; // photoresistor val (range 0-1023)
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(ledPin, OUTPUT);
+  pinMode(photoPin, INPUT);
+}
+
+
+void loop() {
+  lightVal = analogRead(photoPin); // read the light val from the photoresistor
+  Serial.println(lightVal); // print on screen for debugging and setting values
+  if (lightVal < 300)
+  {
+    digitalWrite(ledPin, HIGH); // on LED
+  }
+  else if (lightVal>300 && lightVal<700)
+  {
+    analogWrite(ledPin, ((lightVal)/1023.0*255));
+  }
+  else if (lightVal>700)
+  {
+    digitalWrite(ledPin, LOW);
+  }
+  else
+  {
+    digitalWrite(ledPin, LOW);
+  }
+ 
+}
+/* This section of code proceeds underneath Serial.println(lightVal) (nightlight)
+if (lightVal > 400) // 400 worked for the room Mr. Conner was in
+{
+digitalWrite(ledPin, LOW); // turn off LED
+}
+
+else // when the light val is lower than the threshold
+{
+digitalWrite(ledPin, HIGH); // turn on LED
+}
+
+delay(500);
+
+*/
+
+/*
+This section of code is taken from the extension!
+if (lightVal < 300)
+  {
+    digitalWrite(ledPin, HIGH); // on LED
+  }
+  else
+  {
+    analogWrite(ledPin, 15); // dim LED
+    }
+*/
