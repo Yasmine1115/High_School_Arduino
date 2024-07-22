@@ -1,0 +1,192 @@
+/*
+Dino Game
+*/
+
+#include <LiquidCrystal_I2C.h>
+#include<Wire.h>
+int buttonPin = 8;
+const int buzzerPin =9;
+int buttonState; 
+LiquidCrystal_I2C lcd(0x27,20,4);
+
+int highScore;
+int dist;
+int distTwo; //set distance from the object
+int score;
+
+boolean dinoOnGround = true; //check if rabbit on ground
+boolean playState = false; //the game starts when this is true
+
+byte rabbit[8] = {
+  B01010,
+  B01010,
+  B01110,
+  B10101,
+  B11111,
+  B01110,
+  B11110,
+  B01010
+};
+
+byte object[8] = {
+  B00100,
+  B10100,
+  B11111,
+  B11110,
+  B10100,
+  B00100,
+  B00100,
+  B00100
+};
+
+
+
+void setup() {
+  pinMode(buzzerPin, OUTPUT);
+  pinMode(buttonPin, INPUT);
+  lcd.init();
+  lcd.backlight();
+
+  lcd.begin(16, 2);
+  lcd.createChar(7, rabbit); //rabbit is 7
+  lcd.createChar(6, object); //object is 6
+  lcd.setCursor(0,1);
+  lcd.write(7);
+}
+
+void loop() {
+  lcd.clear();
+
+  if(!playState)//if playState is false
+  {
+    lcd.setCursor(0,0);
+    lcd.print("Press to start");
+    lcd.setCursor(0,1);
+    lcd.print("(-_-) LOL");
+    
+    if(digitalRead(buttonPin)==HIGH) 
+   {
+      playState = true; // when button pushed, make playState true
+   }
+  }
+
+  if(playState) //is True
+  {
+    startGame();
+  }
+  delay(100);
+}
+
+
+
+
+void startGame(){
+  lcd.clear();
+
+  dist = random(4,9);
+  distTwo = random(4,9); //makes random gaps between the objects
+
+  for(int i=16; i>=-(dist+distTwo); i--) //make the objects move
+    {
+      lcd.setCursor(13,0);
+      lcd.print(score);  // print the score
+
+      int state = digitalRead(buttonPin);
+      if(state == HIGH)
+      {
+        buttonState = 1;
+        tone(buzzerPin, 700, 100);
+      }
+      else if(state == LOW)
+      {
+        buttonState = 0;
+      }
+
+      if(buttonState == 1){  
+        lcd.setCursor(1,0); //set dinoOnGround to false
+        lcd.write(7);
+        lcd.setCursor(1,1);
+        lcd.print(" ");
+        dinoOnGround = false;
+      }
+      else{                     // When the button is not pushed 
+        lcd.setCursor(1,1);     // print the dino on the lower row 
+        lcd.write(7);           // and set dinoOnGround to true
+        lcd.setCursor(1,0);
+        lcd.print(" ");
+        dinoOnGround = true;
+      }
+
+      //print the object so that it moves with the loop
+      lcd.setCursor(i,1); 
+      lcd.write(6);
+      lcd.setCursor(i+1,1);
+      lcd.print(" ");
+    
+      lcd.setCursor(i+dist,1);
+      lcd.write(6);
+      lcd.setCursor(i+dist+1,1);
+      lcd.print(" ");
+    
+      lcd.setCursor(i+dist+distTwo,1);
+      lcd.write(6);
+      lcd.setCursor(i+dist+distTwo+1,1);
+      lcd.print(" ");
+
+
+      //When the objects reaches the starting point
+      if((i+dist+distTwo)==-1){
+        i=12;   // taken to the end and set up randomly again
+      } 
+
+      
+      if(i==1 && (dinoOnGround == true))
+      {
+        lcd.clear();             // instructions for the game over screen
+        lcd.print("Oh...");
+        if(score>highScore){
+          highScore = score;
+        }
+        lcd.setCursor(0,1);
+        lcd.print("HIGH : ");
+        lcd.print(highScore);
+        playState = false;  //Set the playState as false so it goes to the start screen after the game is over
+        delay(5000);         
+        score = 0;
+        break;
+      }
+      else if(i+dist == 1 && (dinoOnGround == true))
+      {
+        lcd.clear();
+        lcd.print("Oh...");
+        if(score>highScore){
+          highScore = score;
+        }
+        lcd.setCursor(0,1);
+        lcd.print("HIGH : ");
+        lcd.print(highScore);
+        playState = false;  //Set the playState as false so it goes to the start screen after the game is over
+        delay(5000);         
+        score = 0;
+        break;
+      }
+      else if(i+dist+distTwo == 1 && (dinoOnGround == true))
+      {
+        lcd.clear();
+        lcd.print("Oh...");
+        if(score>highScore){
+          highScore = score;
+         
+        } 
+        lcd.setCursor(0,1);
+        lcd.print("HIGH : ");
+        lcd.print(highScore);
+        playState = false;
+        delay(5000);
+        score = 0;
+        break;
+      }
+    score++;  // increase the score variable for every run of the loop  
+    delay(500);
+    }
+}
