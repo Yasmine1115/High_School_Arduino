@@ -1,0 +1,36 @@
+/*
+  LEDs are going to blink once each, twice, three times...and this pattern continues
+  No user input
+*/
+
+int greenPin = 8;
+int yellowPin = 12;
+
+void setup() {
+    pinMode(greenPin, OUTPUT);
+    pinMode(yellowPin, OUTPUT);
+
+    Serial.begin(9600);
+}
+
+void loop() {
+  
+  for(int i = 0; i>=0; i++)
+  {
+    digitalWrite(yellowPin, HIGH);
+    delay(1000);
+    digitalWrite(yellowPin, LOW);
+    delay(1000);
+  }//this loops yellow forever and not green
+  int j=0;
+
+  for(int j = 0; j>=0; j++)
+  {
+    digitalWrite(greenPin, HIGH);
+    delay(1000);
+    digitalWrite(greenPin, LOW);
+    delay(1000);
+  }
+  
+
+}
