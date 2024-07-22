@@ -1,0 +1,69 @@
+
+/*
+  add a second motor and make the y axis controll it
+*/
+
+//0-1024 is the range of the joystick, middle is around 500
+
+#include <Servo.h>
+
+int servoPin = 3;
+int servo2Pin = 5;
+Servo Servo1;
+Servo Servo2;
+
+//Joystick pin numbers
+const int SW_pin = 2; // pin for the push down button/switch on the joystick
+const int X_pin = A0; //Joystick X-out
+const int Y_pin = A1; //Joystick Y-out
+
+//const variable that we fixed it's value for, so you don't accidentally change the value
+
+void setup() {
+  pinMode(SW_pin, INPUT); // declare the joystick push down button as an input
+  digitalWrite(SW_pin, HIGH); //[enable] the button on the joystick (passive HIGH)
+
+  Serial.begin(9600);
+
+  Servo1.attach(servoPin); //attach the Servo pin to the Servo
+  Servo2.attach(servo2Pin); 
+}
+
+void loop() {
+  if(digitalRead(SW_pin) == HIGH) //check if the button is not pressed
+  {
+    //use a series of print statement to display the data for the x/y values of the joystick
+    Serial.print("State: ");
+    Serial.print("The joystick is ON");
+    Serial.print("\n");
+    Serial.print("X-axis: ");
+    Serial.print((int)analogRead(X_pin)/1024.0*180); //print the joystick x vlaue/1024
+    Serial.print("\n"); //jump to new line
+    Serial.print("Y-axis: ");
+    Serial.println((int)analogRead(Y_pin)/1024.0*180); //print the joystick y value
+    Serial.print("\n\n"); //jump to new line
+  
+    //write the new position (from the joystick) to the Servo motor
+    Servo1.write((int)(analogRead(X_pin)/1024.0*180));
+    Servo2.write((int)(analogRead(Y_pin)/1024.0*180));
+    delay(5);
+  }
+  else //the button is pressed
+  {
+    delay(1000); //delay to avoid the button being held down longer than we want to read it for
+    Serial.print("State: ");
+    Serial.print("The joystick i OFF");
+    Serial.print("\n");
+    Serial.print("Press down on the joystick to turn it back ON");
+    Serial.print("\n");
+
+    while(true) //infinite loop
+    {
+      if(digitalRead(SW_pin) == LOW) //if the button gets pressed, break out of the infinite loop, restarting the loop()
+      {
+        break;
+      }
+    }
+    delay(1000); //so no false action
+  }
+}
