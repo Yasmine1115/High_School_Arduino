@@ -1,0 +1,51 @@
+/*
+ use 3 potentiometer to each change the values of red, green and blue
+*/
+
+int redPin = 9;
+int greenPin = 10;
+int bluePin = 11;
+
+int rPotPin = A0;
+int gPotPin = A1;
+int bPotPin = A2;
+
+int readValue;
+int greenValue;
+int blueValue;
+int redValue;
+
+
+void setup() {
+  Serial.begin(9600);
+
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+  
+  pinMode(rPotPin, INPUT);
+  pinMode(gPotPin, INPUT);
+  pinMode(bPotPin, INPUT);
+}
+
+void loop() {
+  
+  int readValueR = analogRead(rPotPin);
+  redValue = (255./1023.)*readValueR; 
+  analogWrite(redPin, redValue); 
+  Serial.println("RValue: ");
+  Serial.println(redValue);
+  
+  int readValueG = analogRead(gPotPin);
+  greenValue = (255./1023.)*readValueG; 
+  analogWrite(greenPin, greenValue);
+  Serial.println("GValue: ");
+  Serial.println(greenValue);
+
+  int readValueB = analogRead(bPotPin);
+  blueValue = (255./1023.)*readValueB; 
+  analogWrite(bluePin, blueValue); 
+  Serial.println("BValue: ");
+  Serial.println(blueValue);
+  delay(10);
+}
