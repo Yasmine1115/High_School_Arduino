@@ -1,0 +1,92 @@
+/*
+  add yellow
+*/
+
+int redPin = 11;
+int greenPin = 10;
+int bluePin = 9;
+
+int S2 = 7;
+int S3 = 8;
+int outPin = 4;
+
+int rColorStrength;
+int gColorStrength;
+int bColorStrength;
+int yColorStrength;
+
+unsigned int pulseWidth; 
+
+void setup() {
+ Serial.begin(9600);
+
+ pinMode(redPin, OUTPUT);
+ pinMode(greenPin, OUTPUT);
+ pinMode(bluePin, OUTPUT);
+
+ pinMode(S2, OUTPUT); 
+ pinMode(S3, OUTPUT);
+ pinMode(outPin, INPUT);
+
+
+}
+
+void loop() {
+ digitalWrite(S2, LOW);
+ digitalWrite(S3, LOW);
+ pulseWidth = pulseIn(outPin, LOW);
+ rColorStrength = (pulseWidth/10)-1;
+ rColorStrength = (255-rColorStrength);
+
+ digitalWrite(S2, HIGH);
+ digitalWrite(S3, HIGH);
+ pulseWidth = pulseIn(outPin, LOW);
+ gColorStrength = (pulseWidth/14)-1;
+ gColorStrength = (255-gColorStrength);
+
+ digitalWrite(S2, LOW);
+ digitalWrite(S3, HIGH);
+ pulseWidth = pulseIn(outPin, LOW);
+ bColorStrength = (pulseWidth/11)-1;
+ bColorStrength = (255-bColorStrength);
+
+ 
+ Serial.print(rColorStrength);
+ Serial.print(" ");
+ Serial.print(gColorStrength);
+ Serial.print(" ");
+ Serial.print(bColorStrength);
+ Serial.println(" ");
+ delay(250);
+
+ //find which of the color values is the highest and use that to determine the color of the LED
+ if (bColorStrength < rColorStrength && bColorStrength < gColorStrength && rColorStrength > gColorStrength ) 
+ {
+  rColorStrength = 170;
+  gColorStrength = 255;
+  bColorStrength = 0;
+  Serial.print("Yellow");
+ }
+ else if(rColorStrength>bColorStrength && rColorStrength > gColorStrength) 
+{
+  rColorStrength = 255;
+  gColorStrength = 0;
+  bColorStrength = 0;
+}
+ else if(gColorStrength>bColorStrength && gColorStrength > rColorStrength)  
+{
+  rColorStrength = 0;
+  gColorStrength = 255;
+  bColorStrength = 0;
+}
+ else if(bColorStrength>gColorStrength && bColorStrength > rColorStrength)
+{
+  rColorStrength = 0;
+  gColorStrength = 0;
+  bColorStrength = 255;
+}
+ else
+ analogWrite(redPin, rColorStrength);
+ analogWrite(greenPin, gColorStrength);
+ analogWrite(bluePin, bColorStrength);
+}
